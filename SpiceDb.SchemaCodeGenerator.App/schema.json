@@ -1,0 +1,170 @@
+{
+  "definitions": [
+    {
+      "name": "user",
+      "relations": [
+        {
+          "name": "group",
+          "types": [
+            {
+              "type": "group"
+            }
+          ]
+        }
+      ],
+      "permissions": [
+        {
+          "name": "user_read",
+          "userSet": {
+            "operation": "union",
+            "children": [
+              {
+                "relation": "group",
+                "permission": "user_read"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": "generated-id-type: string"
+    },
+    {
+      "name": "group",
+      "relations": [
+        {
+          "name": "member",
+          "types": [
+            {
+              "type": "user"
+            }
+          ]
+        },
+        {
+          "name": "rolebinding",
+          "types": [
+            {
+              "type": "rolebinding",
+              "caveat": "when"
+            }
+          ]
+        }
+      ],
+      "permissions": [
+        {
+          "name": "membership",
+          "userSet": {
+            "operation": "union",
+            "children": [
+              {
+                "relation": "member"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user_read",
+          "userSet": {
+            "operation": "union",
+            "children": [
+              {
+                "relation": "rolebinding",
+                "permission": "user_read"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": "generated-id-type: string"
+    },
+    {
+      "name": "rolebinding",
+      "relations": [
+        {
+          "name": "user",
+          "types": [
+            {
+              "type": "user"
+            },
+            {
+              "type": "group",
+              "relation": "membership",
+              "caveat": "when"
+            }
+          ]
+        },
+        {
+          "name": "role",
+          "types": [
+            {
+              "type": "role"
+            }
+          ]
+        }
+      ],
+      "permissions": [
+        {
+          "name": "user_read",
+          "userSet": {
+            "operation": "intersection",
+            "children": [
+              {
+                "relation": "user"
+              },
+              {
+                "relation": "role",
+                "permission": "user_read"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": "generated-id-type: string"
+    },
+    {
+      "name": "role",
+      "relations": [
+        {
+          "name": "user_read",
+          "types": [
+            {
+              "type": "user",
+              "relation": "*"
+            }
+          ]
+        }
+      ],
+      "comment": "generated-id-type: string"
+    },
+    {
+      "name": "test",
+      "relations": [
+        {
+          "name": "complicated_relation",
+          "types": [
+            {
+              "type": "user",
+              "caveat": "when"
+            },
+            {
+              "type": "group",
+              "relation": "membership",
+              "caveat": "when"
+            }
+          ]
+        }
+      ],
+      "comment": "generated-id-type: Guid"
+    }
+  ],
+  "caveats": [
+    {
+      "name": "when",
+      "parameters": {
+        "from": "timestamp",
+        "now": "timestamp",
+        "to": "timestamp"
+      },
+      "comment": "https:play.authzed.comsrZM0RfpEZsS3schema"
+    }
+  ]
+}

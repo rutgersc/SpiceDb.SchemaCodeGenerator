@@ -1,0 +1,39 @@
+// https://play.authzed.com/s/rZM0RfpEZsS3/schema
+
+caveat when(from timestamp, to timestamp, now timestamp) {
+  from < now && now < to
+}
+
+// generated-id-type: string
+definition user {
+    relation group: group
+
+    permission user_read = group->user_read
+}
+
+// generated-id-type: string
+definition group {
+    relation member: user
+    relation rolebinding: rolebinding with when
+
+    permission membership = member
+    permission user_read = rolebinding->user_read
+}
+
+// generated-id-type: string
+definition rolebinding {
+    relation user: user | group
+    relation role: role
+
+    permission user_read = user & role->user_read
+}
+
+// generated-id-type: string
+definition role {
+    relation user_read: user:*
+}
+
+// generated-id-type: Guid
+definition test {
+    relation complicated_relation: user with when | group#membership with when
+}

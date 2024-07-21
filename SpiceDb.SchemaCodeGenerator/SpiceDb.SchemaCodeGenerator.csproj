@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <Configurations>Debug;Release</Configurations>
+        <TreatWarningsAsErrors Condition="'$(Configuration)' != 'Debug'">true</TreatWarningsAsErrors>
+        <Optimize Condition="'$(Configuration)' != 'Debug'">true</Optimize>
+        <DebugType Condition="'$(Configuration)' != 'Release'">Full</DebugType>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Build.Utilities.Core" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="../package/SpiceDb.SchemaCodeGenerator.targets" Link="SpiceDb.SchemaCodeGenerator.targets" Pack="true" PackagePath="build" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="$(MSBuildThisFileDirectory)/bin/$(Configuration)/$(TargetFramework)/*.dll" Pack="true" PackagePath="build" Visible="false" />
+    </ItemGroup>
+
+</Project>

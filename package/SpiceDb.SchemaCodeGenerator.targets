@@ -1,0 +1,32 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <SpiceDbSchemaCodeGeneratorTaskDll
+            Condition="'$(SpiceDbSchemaCodeGeneratorTaskDll)' == ''">$(MSBuildThisFileDirectory)huh\SpiceDb.SchemaCodeGenerator.dll
+        </SpiceDbSchemaCodeGeneratorTaskDll>
+    </PropertyGroup>
+
+    <UsingTask
+        TaskName="SpiceDbSchemaCodeGeneratorTask"
+        AssemblyFile="$(SpiceDbSchemaCodeGeneratorTaskDll)"
+        Condition="'$(Configuration)' == 'Debug'"/>
+
+    <Target
+        Name="ExecuteQueryCodeGeneratorTask"
+        AfterTargets="BeforeCompile"
+        Condition="'$(Configuration)' == 'Debug'">
+      <ItemGroup>
+        <ZedFiles Include="$(MSBuildProjectDirectory)\**\*.zed" />
+      </ItemGroup>
+      <SpiceDbSchemaCodeGeneratorTask InputFiles="@(ZedFiles)" />
+    </Target>
+
+    <ItemGroup>
+      <None Remove="**\*.zed" />
+      <Compile Update="**\*.zed.cs" DependentUpon="%(Filename)"/>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+      <EmbeddedResource Include="**\*.zed" />
+    </ItemGroup>
+
+</Project>
